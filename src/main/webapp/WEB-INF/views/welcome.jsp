@@ -2,59 +2,13 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>My Profile</title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-<!--base css styles-->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/assets/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.min.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/compiled/timepicker.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/clockface/css/clockface.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/css/datepicker.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
 
 
-
-<!--page specific css styles-->
-
-<!--flaty css styles-->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/flaty.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/flaty-responsive.css">
-
-<link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/resources/img/favicon.png">
-
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
-</head>
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
 
-
-	<c:url var="getMixingListWithDate" value="/getMixingListWithDate"></c:url>
+	<c:url var="getPoListByDate" value="/getPoListByDate"></c:url>
 	<c:url var="getMixingAllListWithDate" value="/getMixingAllListWithDate"></c:url>
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
 
 	<div class="container" id="main-container">
@@ -74,15 +28,15 @@
 		<!-- BEGIN Content -->
 		<div id="main-content">
 			<!-- BEGIN Page Title -->
-			<div class="page-title">
+			<!-- <div class="page-title">
 				<div>
-					<h1>
+					<h1> 
 
-						<i class="fa fa-file-o"></i>My Profile
+						<i class="fa fa-file-o"></i>PO List
 
 					</h1>
 				</div>
-			</div>
+			</div> --><br>
 			<!-- END Page Title -->
 
 			<div class="row">
@@ -91,186 +45,252 @@
 					<div class="box" id="todayslist">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i>My Info
+								<i class="fa fa-table"></i> Welcome To Monginis Store Management
 							</h3>
-
-
-
-
-							<div class=" box-content">
-								<form id="addSupplier"
-									action="${pageContext.request.contextPath}/applyForLeave"
-									method="post">
-
-
-
-									<div class="box-content">
-
-										<div class="col-md-2">Employee Name</div>
-										<div class="col-md-3">
-											<input type="text" id="empName" name="empName"
-												class="form-control" value="${employee.empName}"
-												placeholder=" Employee Name " readonly /> <input
-												type="hidden" name="empId" value="${editEmployee.empId}" />
-										</div>
-
-										<div class="col-md-1"></div>
-
-										<div class="col-md-2">Employee Mobile No</div>
-										<div class="col-md-3">
-											<input type="text" name="empMo" value="${employee.empMobile}"
-												class="form-control" placeholder=" Employee Mobile No"readonly/ 
-													  >
-										</div>
-									</div>
-									<br>
-
-									<div class="box-content">
-
-										<div class="col-md-2">Employee Designation</div>
-										<div class="col-md-3">
-											<input type="text" name="empEdu"
-												value="${employee.empDesignation}" class="form-control"
-												placeholder="Employee Designation" readonly />
-										</div>
-										<div class="col-md-1"></div>
-
-										<div class="col-md-2">Total Leaves</div>
-										<div class="col-md-3">
-											<input type="text" name="empEdu"
-												value="${employee.totalLeaves}" class="form-control"
-												placeholder="Total Leaves" readonly />
-										</div>
-
-									</div>
-									<br> <br>
-
-
-
-									<div class="box-content">
-
-										<div class="col-md-2">From Date*</div>
-										<div class="col-md-3">
-											<input type="text" name="fromDate"
-												value="${editEmployee.empJoiningDate}"
-												placeholder="From Date" id="fromDate"
-												class="form-control date-picker" required />
-										</div>
-										<div class="col-md-1"></div>
-										<div class="col-md-2">To Date*</div>
-										<div class="col-md-3">
-											<input type="text" name="toDate"
-												value="${editEmployee.empJoiningDate}" placeholder="To Date"
-												id="toDate" class="form-control date-picker" required />
-										</div>
-									</div>
-
-									<br>
-									<div class="box-content">
-
-										<div class="col-md-2">Reason*</div>
-										<div class="col-md-3">
-											<textarea type="text" name="remark" class="form-control"
-												placeholder="Reason" id="reason" required></textarea>
-										</div>
-									</div><br>
-									<br>
-
-									<div class=" box-content">
-										<div class="col-md-12" style="text-align: center">
-
-
-											<input type="submit" class="btn btn-info" value="Apply"
-												id="submit">
-
-										</div>
-									</div>
-
-								</form>
+							<div class="box-tool">
+								 <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
 							</div>
+
+						</div>
+			<form action="${pageContext.request.contextPath}/listOfPurachaseOrder"
+								class="form-horizontal" id="validation-form" method="get">
+						<div class="box-content">
+
+							 
+							 
+							 
 						</div>
 
+</form>
+
 					</div>
-					
+
 				</div>
-				
-</div> 
-				<footer>
-				<p>2018 © AARYATECH SOLUTIONS</p>
-				</footer> 
-				<!-- END Main Content -->
-				
-				
 
-				<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-					class="fa fa-chevron-up"></i></a>
 			</div>
-			<!-- END Content -->
+			<footer>
+				<p>2019 © MONGINIS</p>
+			</footer>
 		</div>
-		<!-- END Container -->
 
-		<!--basic scripts-->
-		<script
-			src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-		<script>
-			window.jQuery
-					|| document
-							.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+
+	</div>
+
+	<!-- END Content -->
+
+	<!-- END Container -->
+
+	<!--basic scripts-->
+	<script
+		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script>
+		window.jQuery
+				|| document
+						.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+	</script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
+
+	<!--page specific plugin scripts-->
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
+
+
+	<!--page specific plugin scripts-->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
+
+
+
+
+
+	<!--flaty scripts-->
+	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+	<!--page specific plugin scripts-->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/clockface/js/clockface.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+
+	<script type="text/javascript">
+	function search() {
+		  
+		
+		var fromDate = $("#fromDate").val();
+		var toDate = $("#toDate").val();
+		
+		if(fromDate=="" || fromDate == null)
+			alert("Select From Date");
+		else if (toDate=="" || toDate == null)
+			alert("Select To Date");
+		 
+		$('#loader').show();
+
+		$
+				.getJSON(
+						'${getPoListByDate}',
+
+						{
+							 
+							fromDate : fromDate,
+							toDate : toDate, 
+							ajax : 'true'
+
+						},
+						function(data) {
+
+							$('#table1 td').remove();
+							$('#loader').hide();
+
+							if (data == "") {
+								alert("No records found !!");
+
+							}
+						 
+
+						  $.each(
+										data,
+										function(key, itemList) {
+										
+
+											var tr = $('<tr></tr>');
+											
+											 tr.append($('<td style="width:2%;"></td>')
+														.html('<input type="checkbox"  name="name1" value="'+itemList.poId +'"/>'));
+											
+										  	tr.append($('<td></td>').html(key+1));
+										  	tr.append($('<td></td>').html(itemList.poDate));
+										  	tr.append($('<td></td>').html(itemList.poNo));
+										  	
+										  	var type;
+										  	
+										  	if(itemList.poType==1){
+										  		
+										  		type="Regular";
+										  		
+										  	}
+										  	else if(itemList.poType==2){
+										  		type="Job Work";
+										  	}
+											else if(itemList.poType==3){
+												type="General";
+										  	}
+											else{
+												type="Other";
+										  	}
+										  	tr.append($('<td></td>').html(type));
+										  	tr.append($('<td></td>').html(itemList.vendorName));
+										  	tr.append($('<td></td>').html(itemList.indNo));
+										  	if(itemList.poStatus==0) {
+										  		tr.append($('<td></td>').html('<a href="javascript:genPdf('+itemList.poId+');"><abbr'+
+														'title="PDF"><i class="glyphicon glyphicon glyphicon-file"></i></abbr></a> <a href="${pageContext.request.contextPath}/editPurchaseOrder/'+itemList.poId+'"><abbr'+
+														'title="Edit"><i class="fa fa-edit"></i></abbr></a> <a href="${pageContext.request.contextPath}/deletePurchaseOrder/'+itemList.poId+'"'+
+														'onClick="return confirm("Are you sure want to delete this record");"><span class="glyphicon glyphicon-remove"></span></a>'));
+										  		}
+										  	else
+										  		{
+										  		tr.append($('<td></td>').html('<a href="javascript:genPdf('+itemList.poId+');"><abbr'+
+														'title="PDF"><i class="glyphicon glyphicon glyphicon-file"></i></abbr></a> <a href="${pageContext.request.contextPath}/editPurchaseOrder/'+itemList.poId+'"><abbr'+
+														'title="Edit"><i class="fa fa-edit"></i></abbr></a> '));
+										  		}
+										  	
+										    $('#table1 tbody').append(tr); 
+										})  
+										
+							 
+						}); 
+}
+	</script>
+
+
+<script type="text/javascript">
+			function genPdf(id) {
+				//alert(id);
+		
+				window.open('poPdf/'
+						+ id );
+
+			}
+			
+			function commonPdf() {
+
+				var list = [];
+
+				$("input:checkbox[name=name1]:checked").each(function() {
+					list.push($(this).val());
+				});
+
+				window.open('poPdf/' + list);
+
+			}
+			
 		</script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
 
-		<!--page specific plugin scripts-->
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
+<script>
+function myFunction() {
+  var input, filter, table, tr, td ,td1,td2, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table1");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[5];
+    td1 = tr[i].getElementsByTagName("td")[3];
+    td2 = tr[i].getElementsByTagName("td")[4];
+    if (td || td1 || td2) {
+    	
+    	 if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+    	        tr[i].style.display = "";
+    	      }else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+    	        tr[i].style.display = "";
+    	      }else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
+    	        tr[i].style.display = "";
+    	      }
+    	      else {
+    	        tr[i].style.display = "none";
+    	      }
+       
+    }  
+    
+     
+  }
+}
+ 
+</script>
 
-
-		<!--page specific plugin scripts-->
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-
-
-
-
-
-		<!--flaty scripts-->
-		<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
-		<!--page specific plugin scripts-->
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/clockface/js/clockface.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 </body>
 </html>
