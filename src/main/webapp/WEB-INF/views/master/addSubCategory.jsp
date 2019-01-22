@@ -45,7 +45,7 @@
 					<div class="box" id="todayslist">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i>Add Category
+								<i class="fa fa-table"></i>Add Sub-Category
 							</h3>
 							<div class="box-tool">
 								<a href="${pageContext.request.contextPath}/addCategory">
