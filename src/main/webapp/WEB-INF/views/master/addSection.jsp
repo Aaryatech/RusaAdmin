@@ -48,8 +48,8 @@
 								<i class="fa fa-table"></i>Add Section
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/addCategory">
-									Add Category</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/addSection">
+									Add Section</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 
@@ -57,15 +57,17 @@
 
 						<div class=" box-content">
 							<form id="addSupplier"
-								action="${pageContext.request.contextPath}/insertCategory"
+								action="${pageContext.request.contextPath}/insertSection"
 								onsubmit="return confirm('Do you really want to submit the form?');" method="post">
+								
+								<input id="sectionId" value="${editSection.sectionId}"  name="sectionId" type="hidden"  >
 								
 								<div class="box-content">
 
 									<div class="col-md-2">Section No*</div>
 									<div class="col-md-3">
 										<input id="sectionNo" class="form-control"
-								placeholder="Section Code" value="${editCategory.catDesc}"  style="text-align: left;" name="sectionNo" type="text" required>
+								placeholder="Section Code" value="${editSection.sectionNo}"  style="text-align: left;" name="sectionNo" type="text" required>
 								 
 								  
 									</div>
@@ -73,7 +75,7 @@
 									<div class="col-md-2">Section Name*</div>
 									<div class="col-md-3">
 										<input id="sectionName" class="form-control"
-								placeholder="Section Name" value="${editCategory.catPrefix}"  style="text-align: left;" name="sectionName" type="text" required>
+								placeholder="Section Name" value="${editSection.sectionName}"  style="text-align: left;" name="sectionName" type="text" required>
 								 
 								  
 									</div>
@@ -86,7 +88,7 @@
 									<div class="col-md-2">Section Description*</div>
 									<div class="col-md-3">
 										<input id="sectionDesc" class="form-control"
-								placeholder="Section Description" value="${editCategory.catDesc}"  style="text-align: left;" name="sectionDesc" type="text" required>
+								placeholder="Section Description" value="${editSection.sectionDesc}"  style="text-align: left;" name="sectionDesc" type="text" required>
 								  
 									</div>
 									<div class="col-md-1"></div>
@@ -94,7 +96,7 @@
 									<div class="col-md-2">Sequence No*</div>
 									<div class="col-md-3">
 										<input id="seqNo" class="form-control"
-								placeholder="Sequence No" value="${editCategory.monthlyLimit}"  style="text-align: left;" name="seqNo" type="text" required>
+								placeholder="Sequence No" value="${editSection.sectionSortNo}"  style="text-align: left;" name="seqNo" type="text" required>
 								  
 									</div>
 									 
@@ -130,34 +132,22 @@
 								</tr>
 							</thead>
 							<tbody>
-								<%-- <c:forEach items="${empList}" var="empList" varStatus="count">
-									<tr class="table-flag-blue">
+							 <c:forEach items="${sectionList}" var="sectionList" varStatus="count">
+									<tr  >
 										<td>${count.index+1}</td>
-										<td>${empList.empName}</td>
-										<td>${empList.empEdu}</td>
-										<td>${empList.empMobile}</td>
-
-
-										<td>${empList.empJoiningDate}</td>
-										<td>${empList.empBirthdate}</td>
-										<td>${empList.sickLeave}</td>
-										<td>${empList.causalLeave}</td>
-										
-											<td>${empList.usedSickLeave}</td>
-										<td>${empList.usedCasualLeave}</td>
-										<td>${empList.fromDate}</td>
-										<td>${empList.toDate}</td>
+										<td>${sectionList.sectionNo}</td>
+										<td>${sectionList.sectionName}</td>
+										<td>${sectionList.sectionDesc}</td> 
+										<td>${sectionList.sectionSortNo}</td> 
 										<td><a
-											href="${pageContext.request.contextPath}/editEmp/${empList.empId}"><span
+											href="${pageContext.request.contextPath}/editSection/${sectionList.sectionId}"><span
 												class="glyphicon glyphicon-edit"></span></a> <a
-											href="${pageContext.request.contextPath}/deleteEmp/${empList.empId}"
+											href="${pageContext.request.contextPath}/deleteSection/${sectionList.sectionId}"
 											onClick="return confirm('Are you sure want to delete this record');"><span
 												class="glyphicon glyphicon-remove"></span></a></td>
 									</tr>
 								</c:forEach>
-								 --%>
 								 
-
 							</tbody>
 						</table>
 					</div>

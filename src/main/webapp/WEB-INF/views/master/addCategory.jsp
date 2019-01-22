@@ -95,7 +95,20 @@
 									<div class="col-md-2" >Section No</div>
 									<div class="col-md-3">
 										<select   class="form-control chosen"   name="sectionId"  id="sectionId"  >
-										 
+										  
+										 <option value="">select</option>
+											<c:forEach items="${sectionList}" var="sectionList">
+												<c:choose>
+													<c:when test="${sectionList.sectionId==editItem.catId}">
+														<option value="${sectionList.sectionId}" selected>${sectionList.sectionNo}</option>
+													</c:when>
+													<c:otherwise>
+														<option value="${sectionList.sectionId}">${sectionList.sectionNo}</option>
+													</c:otherwise>
+												</c:choose>
+
+
+											</c:forEach>
 											</select>
 									</div> 
 									 
@@ -143,32 +156,23 @@
 								</tr>
 							</thead>
 							<tbody>
-								<%-- <c:forEach items="${empList}" var="empList" varStatus="count">
-									<tr class="table-flag-blue">
+								  <c:forEach items="${categoryList}" var="categoryList" varStatus="count">
+									<tr  >
 										<td>${count.index+1}</td>
-										<td>${empList.empName}</td>
-										<td>${empList.empEdu}</td>
-										<td>${empList.empMobile}</td>
-
-
-										<td>${empList.empJoiningDate}</td>
-										<td>${empList.empBirthdate}</td>
-										<td>${empList.sickLeave}</td>
-										<td>${empList.causalLeave}</td>
-										
-											<td>${empList.usedSickLeave}</td>
-										<td>${empList.usedCasualLeave}</td>
-										<td>${empList.fromDate}</td>
-										<td>${empList.toDate}</td>
+										<td>${categoryList.catCode}</td>
+										<td>${categoryList.catName}</td>
+										<td>${categoryList.catDesc}</td> 
+										<td>${categoryList.sectionId}</td>
+										<td>${categoryList.catSortNo}</td> 
 										<td><a
-											href="${pageContext.request.contextPath}/editEmp/${empList.empId}"><span
+											href="${pageContext.request.contextPath}/editCategory/${categoryList.catId}"><span
 												class="glyphicon glyphicon-edit"></span></a> <a
-											href="${pageContext.request.contextPath}/deleteEmp/${empList.empId}"
+											href="${pageContext.request.contextPath}/deleteCategory/${categoryList.catId}"
 											onClick="return confirm('Are you sure want to delete this record');"><span
 												class="glyphicon glyphicon-remove"></span></a></td>
 									</tr>
 								</c:forEach>
-								 --%>
+								  
 								 
 
 							</tbody>
