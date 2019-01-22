@@ -67,6 +67,7 @@
 										<input id="catCode" class="form-control"
 								placeholder="Category Code" value="${editCategory.catDesc}"  style="text-align: left;" name="catCode" type="text" required>
 								 
+								  <input id="catId" value="${editCategory.catDesc}" name="catId" type="hidden" required>
 								  
 									</div>
 									<div class="col-md-1"></div>
@@ -94,7 +95,7 @@
 									
 									<div class="col-md-2" >Section No</div>
 									<div class="col-md-3">
-										<select   class="form-control chosen"   name="sectionId"  id="sectionId"  >
+										<select   class="form-control chosen"   name="sectionId"  id="sectionId"  required>
 										  
 										 <option value="">select</option>
 											<c:forEach items="${sectionList}" var="sectionList">
@@ -119,7 +120,7 @@
 									<div class="col-md-2">Sequence No*</div>
 									<div class="col-md-3">
 										<input id="seqNo" class="form-control"
-								placeholder="Sequence No" value="${editCategory.monthlyLimit}"  style="text-align: left;" name="seqNo" type="text" required>
+								placeholder="Sequence No" value="${editCategory.monthlyLimit}"  style="text-align: left;" name="seqNo" type="number" required>
 								  
 									</div>
 									 
@@ -130,7 +131,7 @@
 					<br>
 								<div class=" box-content">
 									<div class="col-md-12" style="text-align: center">
-										<input type="submit" class="btn btn-info" value="Submit"
+										<input type="submit" onclick="validation()" class="btn btn-info" value="Submit"
 											id="submit">
 
 
@@ -162,7 +163,7 @@
 										<td>${categoryList.catCode}</td>
 										<td>${categoryList.catName}</td>
 										<td>${categoryList.catDesc}</td> 
-										<td>${categoryList.sectionId}</td>
+										<td>${categoryList.sectionName}</td>
 										<td>${categoryList.catSortNo}</td> 
 										<td><a
 											href="${pageContext.request.contextPath}/editCategory/${categoryList.catId}"><span
@@ -280,19 +281,13 @@
 
 
 	<script type="text/javascript">
-		function passwordValidation() {
+		function validation() {
 
-			var pass = document.getElementById("password").value;
-			var pass1 = document.getElementById("rePassword").value;
+			var sectionId = document.getElementById("sectionId").value;
+			 
 
-			if (pass != "" && pass1 != "") {
-				if (pass != pass1) {
-					alert("Password Not Matched ");
-					document.getElementById("submit").disabled = true;
-				} else {
-					document.getElementById("submit").disabled = false;
-
-				}
+			if (sectionId == "" || sectionId == null) {
+				alert("Select Section ");
 
 			}
 		}
