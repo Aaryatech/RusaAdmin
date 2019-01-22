@@ -65,16 +65,16 @@
 									<div class="col-md-2">Category Code*</div>
 									<div class="col-md-3">
 										<input id="catCode" class="form-control"
-								placeholder="Category Code" value="${editCategory.catDesc}"  style="text-align: left;" name="catCode" type="text" required>
+								placeholder="Category Code" value="${editCategory.catCode}"  style="text-align: left;" name="catCode" type="text" required>
 								 
-								  <input id="catId" value="${editCategory.catDesc}" name="catId" type="hidden" required>
+								  <input id="catId" value="${editCategory.catId}" name="catId" type="hidden"  >
 								  
 									</div>
 									<div class="col-md-1"></div>
 									<div class="col-md-2">Category Name*</div>
 									<div class="col-md-3">
 										<input id="catName" class="form-control"
-								placeholder="Category Name" value="${editCategory.catPrefix}"  style="text-align: left;" name="catName" type="text" required>
+								placeholder="Category Name" value="${editCategory.catName}"  style="text-align: left;" name="catName" type="text" required>
 								 
 								  
 									</div>
@@ -100,7 +100,7 @@
 										 <option value="">select</option>
 											<c:forEach items="${sectionList}" var="sectionList">
 												<c:choose>
-													<c:when test="${sectionList.sectionId==editItem.catId}">
+													<c:when test="${sectionList.sectionId==editCategory.sectionId}">
 														<option value="${sectionList.sectionId}" selected>${sectionList.sectionNo}</option>
 													</c:when>
 													<c:otherwise>
@@ -120,7 +120,7 @@
 									<div class="col-md-2">Sequence No*</div>
 									<div class="col-md-3">
 										<input id="seqNo" class="form-control"
-								placeholder="Sequence No" value="${editCategory.monthlyLimit}"  style="text-align: left;" name="seqNo" type="number" required>
+								placeholder="Sequence No" value="${editCategory.catSortNo}"  style="text-align: left;" name="seqNo" type="number" required>
 								  
 									</div>
 									 
@@ -293,7 +293,7 @@
 		}
 		function FocusOnInput()
 		 {
-		 document.getElementById("catDesc").focus();
+		 document.getElementById("catCode").focus();
 		 }
 		 
 	</script>

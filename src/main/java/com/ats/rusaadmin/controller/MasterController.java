@@ -30,14 +30,16 @@ import com.ats.rusaadmin.model.Section;
 public class MasterController {
 	
 	RestTemplate rest = new RestTemplate();
+	GetCategory editcat = new GetCategory();
+	
 	@RequestMapping(value = "/addCategory", method = RequestMethod.GET)
 	public ModelAndView addCategory(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("master/addCategory");
 		try {
- 
+			editcat = new GetCategory();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("delStatus", 0);
+			map.add("delStatus", 1);
 			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatList", map,
 					GetCategory[].class);
 			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
@@ -68,23 +70,83 @@ public class MasterController {
 			int sectionId = Integer.parseInt(request.getParameter("sectionId"));
 			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
 
-			Category category = new Category();
-
-			if (catId == "" || catId == null)
-				category.setCatId(0);
-			else
-				category.setCatId(Integer.parseInt(catId));
-			category.setCatDesc(catDesc);
-			category.setCatCode(catCode);
-			category.setCatName(catName);
-			category.setSectionId(sectionId);
-			category.setCatSortNo(seqNo);
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 			
-			System.out.println("category" + category);
+			 
 
-			Category res = rest.postForObject(Constant.url + "/saveUpdateCategory", category, Category.class);
+			if (catId == "" || catId == null) {
+				editcat.setCatId(0);
+				editcat.setCatAddDate(sf.format(date));
+			}else {
+				editcat.setCatId(Integer.parseInt(catId));
+				editcat.setCatEditDate(sf.format(date));
+			}
+			editcat.setCatDesc(catDesc);
+			editcat.setCatCode(catCode);
+			editcat.setCatName(catName);
+			editcat.setSectionId(sectionId);
+			editcat.setCatSortNo(seqNo); 
+			editcat.setIsActive(1);
+			editcat.setDelStatus(1);
+			System.out.println("category" + editcat);
+
+			Category res = rest.postForObject(Constant.url + "/saveUpdateCategory", editcat, Category.class);
 
 			System.out.println("res " + res);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/addCategory";
+	}
+	
+	@RequestMapping(value = "/editCategory/{catId}", method = RequestMethod.GET)
+	public ModelAndView editCategory(@PathVariable int catId, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/addCategory");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("catId", catId);
+
+			 editcat = rest.postForObject(Constant.url + "/getAllCatListByCatId", map, GetCategory.class);
+			model.addObject("editCategory", editcat);
+
+			System.out.println(editcat);
+			
+			Section[] section = rest.getForObject(Constant.url + "/getAllSectionList", 
+					Section[].class);
+			List<Section> sectionList = new ArrayList<Section>(Arrays.asList(section));
+			model.addObject("sectionList", sectionList);
+			
+			 map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus", 1);
+			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatList", map,
+					GetCategory[].class);
+			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
+			model.addObject("categoryList", categoryList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/deleteCategory/{catId}", method = RequestMethod.GET)
+	public String deleteCategory(@PathVariable int catId, HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("catIdList", catId); 
+			map.add("delStatus", 0); 
+			Info res = rest.postForObject(Constant.url + "/deleteMultiCategory", map, Info.class);
+			System.out.println(res);
 
 		} catch (Exception e) {
 			e.printStackTrace();
