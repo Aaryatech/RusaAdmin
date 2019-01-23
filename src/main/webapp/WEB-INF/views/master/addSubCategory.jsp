@@ -48,8 +48,8 @@
 								<i class="fa fa-table"></i>Add Sub-Category
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/addCategory">
-									Add Category</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/addSubCategory">
+									Add Sub-Category</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 
@@ -57,7 +57,7 @@
 
 						<div class=" box-content">
 							<form id="addSupplier"
-								action="${pageContext.request.contextPath}/insertCategory"
+								action="${pageContext.request.contextPath}/insertSubCategory"
 								onsubmit="return confirm('Do you really want to submit the form?');" method="post">
 								
 								<div class="box-content">
@@ -65,15 +65,15 @@
 									<div class="col-md-2">Sub-Category Code*</div>
 									<div class="col-md-3">
 										<input id="subCatCode" class="form-control"
-								placeholder="Sub-Category Code" value="${editCategory.catDesc}"  style="text-align: left;" name="subCatCode" type="text" required>
+								placeholder="Sub-Category Code" value="${editSubCategory.subCatCode}"  style="text-align: left;" name="subCatCode" type="text" required>
 								 
-								  
+								  <input id="subCatId" value="${editSubCategory.subCatId}" name="subCatId" type="hidden"  >
 									</div>
 									<div class="col-md-1"></div>
 									<div class="col-md-2">Sub-Category Name*</div>
 									<div class="col-md-3">
 										<input id="subCatName" class="form-control"
-								placeholder="Sub-Category Name" value="${editCategory.catPrefix}"  style="text-align: left;" name="subCatName" type="text" required>
+								placeholder="Sub-Category Name" value="${editSubCategory.subCatName}"  style="text-align: left;" name="subCatName" type="text" required>
 								 
 								  
 									</div>
@@ -86,15 +86,27 @@
 									<div class="col-md-2">Sub-Category Description*</div>
 									<div class="col-md-3">
 										<input id="subCatDesc" class="form-control"
-								placeholder="Sub-Category Description" value="${editCategory.catDesc}"  style="text-align: left;" name="subCatDesc" type="text" required>
+								placeholder="Sub-Category Description" value="${editSubCategory.subCatDesc}"  style="text-align: left;" name="subCatDesc" type="text" required>
 								  
 									</div>
 									<div class="col-md-1"></div>
 									
 									<div class="col-md-2" >Select Category</div>
 									<div class="col-md-3">
-										<select   class="form-control chosen"   name="catId"  id="catId"  >
-										 
+										<select   class="form-control chosen"   name="catId"  id="catId"  required>
+										 	<option value="">select</option>
+											<c:forEach items="${categoryList}" var="categoryList">
+												<c:choose>
+													<c:when test="${categoryList.catId==editSubCategory.catId}">
+														<option value="${categoryList.catId}" selected>${categoryList.catName}</option>
+													</c:when>
+													<c:otherwise>
+														<option value="${categoryList.catId}">${categoryList.catName}</option>
+													</c:otherwise>
+												</c:choose>
+
+
+											</c:forEach>
 											</select>
 									</div> 
 									 
@@ -105,7 +117,7 @@
 									<div class="col-md-2">Sequence No*</div>
 									<div class="col-md-3">
 										<input id="seqNo" class="form-control"
-								placeholder="Sequence No" value="${editCategory.monthlyLimit}"  style="text-align: left;" name="seqNo" type="text" required>
+								placeholder="Sequence No" value="${editSubCategory.subCatSortNo}"  style="text-align: left;" name="seqNo" type="number" required>
 								  
 									</div>
 									 
@@ -142,32 +154,23 @@
 								</tr>
 							</thead>
 							<tbody>
-								<%-- <c:forEach items="${empList}" var="empList" varStatus="count">
-									<tr class="table-flag-blue">
+								  <c:forEach items="${subCategoryList}" var="subCategoryList" varStatus="count">
+									<tr >
 										<td>${count.index+1}</td>
-										<td>${empList.empName}</td>
-										<td>${empList.empEdu}</td>
-										<td>${empList.empMobile}</td>
-
-
-										<td>${empList.empJoiningDate}</td>
-										<td>${empList.empBirthdate}</td>
-										<td>${empList.sickLeave}</td>
-										<td>${empList.causalLeave}</td>
-										
-											<td>${empList.usedSickLeave}</td>
-										<td>${empList.usedCasualLeave}</td>
-										<td>${empList.fromDate}</td>
-										<td>${empList.toDate}</td>
+										<td>${subCategoryList.subCatCode}</td>
+										<td>${subCategoryList.subCatName}</td>
+										<td>${subCategoryList.subCatDesc}</td> 
+										<td>${subCategoryList.catName}</td>
+										<td>${subCategoryList.subCatSortNo}</td> 
 										<td><a
-											href="${pageContext.request.contextPath}/editEmp/${empList.empId}"><span
+											href="${pageContext.request.contextPath}/editSubCategory/${subCategoryList.subCatId}"><span
 												class="glyphicon glyphicon-edit"></span></a> <a
-											href="${pageContext.request.contextPath}/deleteEmp/${empList.empId}"
+											href="${pageContext.request.contextPath}/deleteSubCategory/${subCategoryList.subCatId}"
 											onClick="return confirm('Are you sure want to delete this record');"><span
 												class="glyphicon glyphicon-remove"></span></a></td>
 									</tr>
 								</c:forEach>
-								 --%>
+								 
 								 
 
 							</tbody>
