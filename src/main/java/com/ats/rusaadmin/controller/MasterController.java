@@ -1,8 +1,10 @@
 package com.ats.rusaadmin.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -16,12 +18,19 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.rusaadmin.common.Constant;
+import com.ats.rusaadmin.common.VpsImageUpload;
 import com.ats.rusaadmin.model.Category;
+import com.ats.rusaadmin.model.GalleryDetail;
+import com.ats.rusaadmin.model.Galleryheader;
 import com.ats.rusaadmin.model.GetCategory;
+import com.ats.rusaadmin.model.GetGalleryHeaderByCatId;
 import com.ats.rusaadmin.model.GetSubCategory;
 import com.ats.rusaadmin.model.Info;
 import com.ats.rusaadmin.model.Section;
@@ -35,6 +44,7 @@ public class MasterController {
 	GetCategory editcat = new GetCategory();
 	Section editSection = new Section();
 	GetSubCategory editSubCategory = new GetSubCategory();
+	Galleryheader editGalleryheader = new Galleryheader();
 	
 	@RequestMapping(value = "/addCategory", method = RequestMethod.GET)
 	public ModelAndView addCategory(HttpServletRequest request, HttpServletResponse response) {
@@ -389,5 +399,270 @@ public class MasterController {
 
 		return "redirect:/addSection";
 	}
+	
+	
+	@RequestMapping(value = "/addPhotoGallary", method = RequestMethod.GET)
+	public ModelAndView addPhotoGallary(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/addPhotoGallary");
+		try {
+		 
+			 
+			GetGalleryHeaderByCatId[] galleryheader = rest.getForObject(Constant.url + "/getGalleryHeaderList", 
+					GetGalleryHeaderByCatId[].class);
+			List<GetGalleryHeaderByCatId> galleryheaderList = new ArrayList<GetGalleryHeaderByCatId>(Arrays.asList(galleryheader));
+			model.addObject("galleryheaderList", galleryheaderList);
+			 
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus", 1);
+			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatList", map,
+					GetCategory[].class);
+			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
+			model.addObject("categoryList", categoryList);
+			
+			/*GetSubCategory[] getSubCategory = rest.postForObject(Constant.url + "/getAllSubCatList", map,
+					GetSubCategory[].class);
+			List<GetSubCategory> subCategoryList = new ArrayList<GetSubCategory>(Arrays.asList(getSubCategory));
+			model.addObject("subCategoryList", subCategoryList);*/
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/editPhotoGallary/{galleryHeaderId}", method = RequestMethod.GET)
+	public ModelAndView editPhotoGallary(@PathVariable int galleryHeaderId, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/addPhotoGallary");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("galleryHeadId", galleryHeaderId);
+
+			editGalleryheader = rest.postForObject(Constant.url + "/getGalleryHeaderById", map, Galleryheader.class);
+			model.addObject("editGalleryheader", editGalleryheader);
+
+			System.out.println(editGalleryheader);
+			
+			 map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus", 1);
+			GetCategory[] category = rest.postForObject(Constant.url + "/getAllCatList", map,
+					GetCategory[].class);
+			List<GetCategory> categoryList = new ArrayList<GetCategory>(Arrays.asList(category));
+			model.addObject("categoryList", categoryList);
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			 map.add("catId", editGalleryheader.getCatId());
+			 map.add("delStatus", 1);
+			 GetSubCategory[] getSubCategory = rest.postForObject(Constant.url + "/getAllSubCatByCatId", map,
+					 GetSubCategory[].class);
+			 List<GetSubCategory> list = new ArrayList<GetSubCategory>(Arrays.asList(getSubCategory));
+			model.addObject("subCategoryList", list);
+			
+			GetGalleryHeaderByCatId[] galleryheader = rest.getForObject(Constant.url + "/getGalleryHeaderList", 
+					GetGalleryHeaderByCatId[].class);
+			List<GetGalleryHeaderByCatId> galleryheaderList = new ArrayList<GetGalleryHeaderByCatId>(Arrays.asList(galleryheader));
+			model.addObject("galleryheaderList", galleryheaderList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/getSubCatListByCatId", method = RequestMethod.GET)
+	public @ResponseBody List<GetSubCategory> getSubCatListByCatId(HttpServletRequest request, HttpServletResponse response) {
+
+		List<GetSubCategory> list = new ArrayList<GetSubCategory>();
+		try {
+		 
+			 int catId = Integer.parseInt(request.getParameter("catId"));
+			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			 map.add("catId", catId);
+			 map.add("delStatus", 1);
+			 GetSubCategory[] getSubCategory = rest.postForObject(Constant.url + "/getAllSubCatByCatId", map,
+					 GetSubCategory[].class);
+			 list = new ArrayList<GetSubCategory>(Arrays.asList(getSubCategory));
+			 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return list;
+	}
+	
+	@RequestMapping(value = "/insertGalleryHeader", method = RequestMethod.POST)
+	public String insertGalleryHeader(HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/addEmployee");
+		try {
+
+			String galleryHeaderId = request.getParameter("galleryHeaderId");
+			String titleName = request.getParameter("titleName"); 
+			int catId = Integer.parseInt(request.getParameter("catId"));
+			int subCatId = Integer.parseInt(request.getParameter("subCatId"));
+			int seqNo = Integer.parseInt(request.getParameter("seqNo"));
+
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			
+			
+
+			if (galleryHeaderId == "" || galleryHeaderId == null) {
+				editGalleryheader.setGalleryHeaderId(0);
+				editGalleryheader.setGalleryAddDate(sf.format(date));
+			}else {
+				editGalleryheader.setGalleryHeaderId(Integer.parseInt(galleryHeaderId));
+				editGalleryheader.setGalleryEditDate(sf.format(date));
+			}
+			editGalleryheader.setCatId(catId); 
+			editGalleryheader.setSubCatId(subCatId);
+			editGalleryheader.setGalleryTitle(titleName); 
+			editGalleryheader.setGallerySortNo(String.valueOf(seqNo));
+			editGalleryheader.setIsActive(1);
+			editGalleryheader.setDelStatus(1);
+			editGalleryheader.setUserId(1);
+			
+			System.out.println("sub category" + editSubCategory);
+
+			Galleryheader res = rest.postForObject(Constant.url + "/saveGalleryHeader", editGalleryheader, Galleryheader.class);
+
+			System.out.println("res " + res);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/addPhotoGallary";
+	}
+	
+	@RequestMapping(value = "/deletePhotoGallary/{galleryHeaderId}", method = RequestMethod.GET)
+	public String deletePhotoGallary(@PathVariable int galleryHeaderId, HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("galleryHeadId", galleryHeaderId); 
+			Info res = rest.postForObject(Constant.url + "/deleteGalleryHeader", map, Info.class);
+			System.out.println(res);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/addPhotoGallary";
+	}
+	
+	@RequestMapping(value = "/photoGalleryDetail/{galleryHeaderId}", method = RequestMethod.GET)
+	public ModelAndView photoGalleryDetail(@PathVariable int galleryHeaderId, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("master/photoGalleryDetail");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("galleryHeadId", galleryHeaderId);
+
+			editGalleryheader = rest.postForObject(Constant.url + "/getGalleryHeaderById", map, Galleryheader.class);
+			model.addObject("editGalleryheader", editGalleryheader);
+			model.addObject("url", Constant.gallryImageURL);
+			System.out.println(editGalleryheader);
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/insertGalleryDetail", method = RequestMethod.POST)
+	public String insertGalleryDetail(@RequestParam("files") List<MultipartFile> files,HttpServletRequest request,
+			HttpServletResponse response) {
+
+		 
+		try {
+
+			String imgDesc = request.getParameter("imgDesc");
+			List<GalleryDetail> detailList = new ArrayList<GalleryDetail>();  
+			
+			VpsImageUpload upload = new VpsImageUpload();
+			String docFile = null;
+			
+			Date date = new Date(); // your date
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat dateTimeInGMT = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			int year = cal.get(Calendar.YEAR);
+			int month = cal.get(Calendar.MONTH) + 1;
+			int day = cal.get(Calendar.DAY_OF_MONTH);
+			
+			try {
+				
+				for(int i = 0 ; i< files.size() ; i++) {
+					
+					GalleryDetail galleryDetail = new GalleryDetail();
+					docFile =  dateTimeInGMT.format(date)+"_"+files.get(i).getOriginalFilename();
+					galleryDetail.setPhotoName(docFile);
+					galleryDetail.setPhotoCaption(files.get(i).getOriginalFilename());
+					galleryDetail.setPhotoDesc(imgDesc);
+					galleryDetail.setDate(sf.format(date));
+					galleryDetail.setIsActive(1);
+					galleryDetail.setDelStatus(1);
+					galleryDetail.setGalleryHeadId(editGalleryheader.getGalleryHeaderId());
+					
+					upload.saveUploadedFiles(files.get(i), Constant.gallryImage,
+							docFile);
+
+					System.out.println("upload method called for image Upload " + files.get(i).toString());
+					detailList.add(galleryDetail);
+				}
+				
+
+			} catch (IOException e) {
+
+				System.out.println("Exce in File Upload In GATE ENTRY  Insert " + e.getMessage());
+				e.printStackTrace();
+			}
+			 
+
+			GalleryDetail[] res = rest.postForObject(Constant.url + "/saveGalleryDetail", detailList, GalleryDetail[].class);
+			 
+
+			System.out.println(editGalleryheader);
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/photoGalleryDetail/"+editGalleryheader.getGalleryHeaderId();
+	}
+	
+	@RequestMapping(value = "/deletePhotoGallaryDetail/{galleryDetailId}", method = RequestMethod.GET)
+	public String deletePhotoGallaryDetail(@PathVariable int galleryDetailId, HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/empDetail");
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("galleryHeadId", galleryDetailId); 
+			Info res = rest.postForObject(Constant.url + "/deleteGalleryHeader", map, Info.class);
+			System.out.println(res);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/photoGalleryDetail/"+editGalleryheader.getGalleryHeaderId();
+	}
+	
+	 
 
 }
